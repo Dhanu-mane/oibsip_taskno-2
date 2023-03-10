@@ -14,7 +14,7 @@ if (strlen($_SESSION['obcsuid']==0)) {
 
 <head>
    
-    <title>Manage Application Form | Online School Leaving Certificate System</title>
+    <title>Certificcate List| Online School Leaving Certificate System</title>
   
     <!-- Google Fonts
 		============================================ -->
@@ -76,7 +76,7 @@ if (strlen($_SESSION['obcsuid']==0)) {
                                         <ul class="breadcome-menu">
                                             <li><a href="dashboard.php">Home</a> <span class="bread-slash">/</span>
                                             </li>
-                                            <li><span class="bread-blod">Application Form</span>
+                                            <li><span class="bread-blod">Certificates</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -96,7 +96,7 @@ if (strlen($_SESSION['obcsuid']==0)) {
                             <div class="sparkline13-list shadow-reset">
                                 <div class="sparkline13-hd">
                                     <div class="main-sparkline13-hd">
-                                        <h1>View <span class="table-project-n">Detail of</span> Application</h1>
+                                        <h1>Certificate Lists</h1>
                                         <div class="sparkline13-outline-icon">
                                             <span class="sparkline13-collapse-link"><i class="fa fa-chevron-up"></i></span>
                                             <span><i class="fa fa-wrench"></i></span>
@@ -106,13 +106,35 @@ if (strlen($_SESSION['obcsuid']==0)) {
                                 </div>
                                 <div class="sparkline13-graph">
                                     <div class="datatable-dashv1-list custom-datatable-overright">
-                                       
-                                         <?php
-                               $vid=$_GET['viewid'];
+                                        <div id="toolbar">
+                                            <select class="form-control">
+                                                <option value="">Export Basic</option>
+                                                <option value="all">Export All</option>
+                                                <option value="selected">Export Selected</option>
+                                            </select>
+                                        </div>
+                                        <table id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-show-toggle="true" data-resizable="true" data-cookie="true" data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar">
+                                            <thead>
+                                                <tr>
+                                            
+                                                    <th>S.No</th>
+                                                    <th>Application Number</th>
+                                                    <th>Name</th>
+                                                    <th >Mobile Number</th>
+                                                    <th>Father's Name</th>
+                                                    <th>Status</th>
+                                                    <th data-field="action">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                               
+                                             
+                                              <?php
+                                            $uid= $_SESSION['obcsuid'];
+$sql="SELECT * from tblapplication where UserID=:uid and Status='Verified'";
 
-$sql="SELECT tblapplication.*,tbluser.FirstName,tbluser.LastName,tbluser.MobileNumber,tbluser.Address from  tblapplication join  tbluser on tblapplication.UserID=tbluser.ID where tblapplication.ID=:vid";
 $query = $dbh -> prepare($sql);
-$query-> bindParam(':vid', $vid, PDO::PARAM_STR);
+$query-> bindParam(':uid', $uid, PDO::PARAM_STR);
 $query->execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
 
@@ -121,77 +143,25 @@ if($query->rowCount() > 0)
 {
 foreach($results as $row)
 {               ?>
-                                <table border="1" class="table table-bordered">
- <tr align="center">
-<td colspan="4" style="font-size:20px;color:blue">
- User Details</td></tr>
-<tr align="center">
-<td colspan="4" style="font-size:20px;color:red">
- Application Number:   <?php  echo $row->ApplicationID;?></td></tr>
-    <tr>
-    <th scope>First Name</th>
-    <td><?php  echo $row->FirstName;?></td>
-    <th scope>Last Name</th>
-    <td><?php  echo $row->LastName;?></td>
-  </tr>
-  <tr>
-    <th scope>Mobile Number</th>
-    <td><?php  echo $row->MobileNumber;?></td>
-    <th>Address</th>
-    <td><?php  echo $row->Address;?></td>
-  </tr>
-<tr align="center">
-<td colspan="4" style="font-size:20px;color:blue">
- Application Details</td></tr>
- <tr>
-    <th scope>Full Name</th>
-    <td><?php  echo $row->FullName;?></td>
-    <th scope>Gender</th>
-    <td><?php  echo $row->Gender;?></td>
-  </tr>
-   <tr>
-    <th scope>Date of School Leaving</th>
-    <td><?php  echo $row->DateofSchool Leaving;?></td>
-    <th scope>Place of College Leaving</th>
-    <td><?php  echo $row->PlaceofSchool Leaving;?></td>
-  </tr>
-  <tr>
-    <th scope>Name of Father</th>
-    <td><?php  echo $row->NameofFather;?></td>
-    <th scope>Permanent Address</th>
-    <td><?php  echo $row->PermanentAdd;?></td>
-  </tr>
-   <tr>
-    <th scope>Postal Address</th>
-    <td><?php  echo $row->PostalAdd;?></td>
-    <th scope>Mobile Number</th>
-    <td><?php  echo $row->MobileNumber;?></td>
-  </tr>
-   <tr>
-    <th scope>Email</th>
-    <td><?php  echo $row->Email;?></td>
-    <th scope>Date of apply</th>
-    <td><?php  echo $row->Dateofapply;?></td>
-  </tr>
-  <tr>
-    <th scope>Remark</th>
-    <?php if($row->Remark==""){ ?>
+                                                <tr>
+                                                    <td><?php echo htmlentities($cnt);?></td>
+                                                    <td><?php  echo htmlentities($row->ApplicationID);?></td>
+                                                    <td><?php  echo htmlentities($row->FullName);?></td>
+                                                   <td><?php  echo htmlentities($row->MobileNumber);?></td>
+                                                    <td><?php  echo htmlentities($row->NameofFather);?></td>
+                                                  <?php if($row->Status==""){ ?>
 
-                     <td><?php echo "Your apllication still pending"; ?></td>
-<?php } else { ?>                  <td><?php  echo htmlentities($row->Remark);?>
-                  </td>
-                  <?php } ?>
-    <th scope>Status</th>
-    <?php if($row->Status==""){ ?>
-
-                     <td><?php echo "Pending"; ?></td>
+                     <td><?php echo "Still Pending"; ?></td>
 <?php } else { ?>                  <td><?php  echo htmlentities($row->Status);?>
                   </td>
                   <?php } ?>
-  </tr>
- 
-  <?php }}?>
-</table>
+                                                    <td class="datatable-ct"><a href="certificates.php?viewid=<?php echo htmlentities ($row->ID);?>"><button class="btn btn-white btn-action btn-xs"><i class="fa fa-folder"></i> View</button></a>
+                                                    </td>
+                                                </tr>
+                                             <?php $cnt=$cnt+1;}} ?>  
+                                            
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>

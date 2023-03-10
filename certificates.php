@@ -96,7 +96,7 @@ if (strlen($_SESSION['obcsuid']==0)) {
                             <div class="sparkline13-list shadow-reset">
                                 <div class="sparkline13-hd">
                                     <div class="main-sparkline13-hd">
-                                        <h1>View <span class="table-project-n">Detail of</span> Application</h1>
+                                        <h1>Certificate Details</h1>
                                         <div class="sparkline13-outline-icon">
                                             <span class="sparkline13-collapse-link"><i class="fa fa-chevron-up"></i></span>
                                             <span><i class="fa fa-wrench"></i></span>
@@ -105,45 +105,30 @@ if (strlen($_SESSION['obcsuid']==0)) {
                                     </div>
                                 </div>
                                 <div class="sparkline13-graph">
+                                    <div id="exampl">
                                     <div class="datatable-dashv1-list custom-datatable-overright">
+                                        <h3 align="center">Certificate of College Leaving</h3>
+                                        <hr />
+                                        <p align="left">This is to certify that the following information has been taken from the original record of School Leaving.</p>
                                        
-                                         <?php
-                               $vid=$_GET['viewid'];
-
-$sql="SELECT tblapplication.*,tbluser.FirstName,tbluser.LastName,tbluser.MobileNumber,tbluser.Address from  tblapplication join  tbluser on tblapplication.UserID=tbluser.ID where tblapplication.ID=:vid";
+<?php
+$vid=$_GET['viewid'];
+$sql="SELECT tblapplication.*,tbluser.FirstName,tbluser.LastName,tbluser.MobileNumber,tbluser.Address from  tblapplication join  tbluser on tblapplication.UserID=tbluser.ID where tblapplication.ID=:vid and  tblapplication.Status='Verified'";
 $query = $dbh -> prepare($sql);
 $query-> bindParam(':vid', $vid, PDO::PARAM_STR);
 $query->execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
-
-$cnt=1;
-if($query->rowCount() > 0)
-{
 foreach($results as $row)
-{               ?>
-                                <table border="1" class="table table-bordered">
- <tr align="center">
-<td colspan="4" style="font-size:20px;color:blue">
- User Details</td></tr>
+{   
+$certgendate=$row->UpdationDate;            ?>
+<table border="1" class="table table-bordered">
+
+
 <tr align="center">
-<td colspan="4" style="font-size:20px;color:red">
- Application Number:   <?php  echo $row->ApplicationID;?></td></tr>
-    <tr>
-    <th scope>First Name</th>
-    <td><?php  echo $row->FirstName;?></td>
-    <th scope>Last Name</th>
-    <td><?php  echo $row->LastName;?></td>
-  </tr>
-  <tr>
-    <th scope>Mobile Number</th>
-    <td><?php  echo $row->MobileNumber;?></td>
-    <th>Address</th>
-    <td><?php  echo $row->Address;?></td>
-  </tr>
-<tr align="center">
-<td colspan="4" style="font-size:20px;color:blue">
- Application Details</td></tr>
- <tr>
+<td colspan="4" >
+<strong> Application Number:</strong>   <?php  echo $row->ApplicationID;?></td></tr>
+
+
     <th scope>Full Name</th>
     <td><?php  echo $row->FullName;?></td>
     <th scope>Gender</th>
@@ -151,9 +136,9 @@ foreach($results as $row)
   </tr>
    <tr>
     <th scope>Date of School Leaving</th>
-    <td><?php  echo $row->DateofSchool Leaving;?></td>
-    <th scope>Place of College Leaving</th>
-    <td><?php  echo $row->PlaceofSchool Leaving;?></td>
+    <td><?php  echo $row->DateofSchoolLeaving;?></td>
+    <th scope>Place of School Leaving</th>
+    <td><?php  echo $row->PlaceofSchoolLeaving;?></td>
   </tr>
   <tr>
     <th scope>Name of Father</th>
@@ -173,26 +158,15 @@ foreach($results as $row)
     <th scope>Date of apply</th>
     <td><?php  echo $row->Dateofapply;?></td>
   </tr>
-  <tr>
-    <th scope>Remark</th>
-    <?php if($row->Remark==""){ ?>
 
-                     <td><?php echo "Your apllication still pending"; ?></td>
-<?php } else { ?>                  <td><?php  echo htmlentities($row->Remark);?>
-                  </td>
-                  <?php } ?>
-    <th scope>Status</th>
-    <?php if($row->Status==""){ ?>
-
-                     <td><?php echo "Pending"; ?></td>
-<?php } else { ?>                  <td><?php  echo htmlentities($row->Status);?>
-                  </td>
-                  <?php } ?>
-  </tr>
  
-  <?php }}?>
+  <?php }?>
 </table>
-                                    </div>
+          
+          <p align="left"><b>Certificate Genration Date :</b> <?php echo htmlentities($certgendate);?></p>
+
+          <p> <i class="fa fa-print fa-2x" style="cursor: pointer;"  OnClick="CallPrint(this.value)" ></i></p>                          
+      </div></div>
                                 </div>
                             </div>
                         </div>
@@ -247,7 +221,17 @@ foreach($results as $row)
     <!-- main JS
 		============================================ -->
     <script src="js/main.js"></script>
-
+  <script>
+function CallPrint(strid) {
+var prtContent = document.getElementById("exampl");
+var WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
+WinPrint.document.write(prtContent.innerHTML);
+WinPrint.document.close();
+WinPrint.focus();
+WinPrint.print();
+WinPrint.close();
+}
+</script>
 
 </body>
 

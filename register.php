@@ -51,7 +51,7 @@ echo "<script>alert('This Mobile Number already exist. Please try again');</scri
 
 <head>
     
-    <title>Register | Online College Leaving Certificate System</title>
+    <title>Register | Online School Leaving Certificate System</title>
    
 		
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i,800" rel="stylesheet">
@@ -105,15 +105,14 @@ echo "<script>alert('This Mobile Number already exist. Please try again');</scri
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="logo">
-                                                <a href="login.php"><img src="img/logo/logo.png" alt="" />
-                                                </a>
+                                                <h3 style="font-weight: bold;color: blue">College Leaving Certificate</h3>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="login-title">
-                                                <h1>Registration Form</h1>
+                                                <h1 style="color: red">User Registration Form</h1>
                                             </div>
                                         </div>
                                     </div>

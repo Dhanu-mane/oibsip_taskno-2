@@ -13,9 +13,11 @@ if (strlen($_SESSION['obcsuid']==0)) {
 <html class="no-js" lang="en">
 
 <head>
+   
+    <title>Manage Application Form | Online School Leaving Certificate System</title>
   
-    <title>Dashboard | Online School Leaving Certificate System</title>
-    
+    <!-- Google Fonts
+		============================================ -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i,800" rel="stylesheet">
     <!-- Bootstrap CSS
 		============================================ -->
@@ -35,9 +37,6 @@ if (strlen($_SESSION['obcsuid']==0)) {
     <!-- animate CSS
 		============================================ -->
     <link rel="stylesheet" href="css/animate.css">
-    <!-- jvectormap CSS
-		============================================ -->
-    <link rel="stylesheet" href="css/jvectormap/jquery-jvectormap-2.0.3.css">
     <!-- normalize CSS
 		============================================ -->
     <link rel="stylesheet" href="css/data-table/bootstrap-table.css">
@@ -60,26 +59,24 @@ if (strlen($_SESSION['obcsuid']==0)) {
 </head>
 
 <body class="materialdesign">
-    
-    <!-- Header top area start-->
+  
     <div class="wrapper-pro">
       <?php include_once('includes/sidebar.php');?>
-        <!-- Header top area start-->
-       <?php include_once('includes/header.php');?>
-            <!-- Header top area end-->
+        <?php include_once('includes/header.php');?>
+       
             <!-- Breadcome start-->
             <div class="breadcome-area mg-b-30 small-dn">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="breadcome-list map-mg-t-40-gl shadow-reset">
+                            <div class="breadcome-list shadow-reset">
                                 <div class="row">
-                                   
+                                    
                                     <div class="col-lg-12">
                                         <ul class="breadcome-menu">
                                             <li><a href="dashboard.php">Home</a> <span class="bread-slash">/</span>
                                             </li>
-                                            <li><span class="bread-blod">Dashboard</span>
+                                            <li><span class="bread-blod">Application Form</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -90,50 +87,93 @@ if (strlen($_SESSION['obcsuid']==0)) {
                 </div>
             </div>
             <!-- Breadcome End-->
-      
-            <!-- Breadcome End-->
-            <!-- income order visit user Start -->
-            <div class="income-order-visit-user-area">
+
+            <!-- Static Table Start -->
+            <div class="data-table-area mg-b-15">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="income-dashone-total income-monthly shadow-reset nt-mg-b-30">
-                                <div class="income-title">
-                                    <div class="main-income-head">
-                                       <?php
-$uid=$_SESSION['obcsuid'];
-$sql="SELECT FirstName,LastName,MobileNumber from  tbluser where ID=:uid";
+                            <div class="sparkline13-list shadow-reset">
+                                <div class="sparkline13-hd">
+                                    <div class="main-sparkline13-hd">
+                                        <h1>View <span class="table-project-n">Detail of</span> Application</h1>
+                                        <div class="sparkline13-outline-icon">
+                                            <span class="sparkline13-collapse-link"><i class="fa fa-chevron-up"></i></span>
+                                            <span><i class="fa fa-wrench"></i></span>
+                                            <span class="sparkline13-collapse-close"><i class="fa fa-times"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sparkline13-graph">
+                                    <div class="datatable-dashv1-list custom-datatable-overright">
+                                        <div id="toolbar">
+                                            <select class="form-control">
+                                                <option value="">Export Basic</option>
+                                                <option value="all">Export All</option>
+                                                <option value="selected">Export Selected</option>
+                                            </select>
+                                        </div>
+                                        <table id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-show-toggle="true" data-resizable="true" data-cookie="true" data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar">
+                                            <thead>
+                                                <tr>
+                                                    <th data-field="state" data-checkbox="true"></th>
+                                                    <th>S.No</th>
+                                                    <th>Application Number</th>
+                                                    <th>Name</th>
+                                                    <th >Mobile Number</th>
+                                                    <th>Father's Name</th>
+                                                    <th>Status</th>
+                                                    <th data-field="action">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                               
+                                             
+                                              <?php
+                                            $uid= $_SESSION['obcsuid'];
+$sql="SELECT * from tblapplication where UserID=:uid";
+
 $query = $dbh -> prepare($sql);
-$query->bindParam(':uid',$uid,PDO::PARAM_STR);
+$query-> bindParam(':uid', $uid, PDO::PARAM_STR);
 $query->execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
+
 $cnt=1;
 if($query->rowCount() > 0)
 {
 foreach($results as $row)
-{               ?> 
-                                        <div class="main-income-phara">
-                                           <h2>Welcome to Online College Leaving Certificate Registration <?php  echo $row->FirstName;?>  <?php  echo $row->LastName;?>!!!</h2>
-                                        </div>
-                                        <?php $cnt=$cnt+1;}} ?>
+{               ?>
+                                                <tr>
+                                                    <td></td>
+                                                    <td><?php echo htmlentities($cnt);?></td>
+                                                    <td><?php  echo htmlentities($row->ApplicationID);?></td>
+                                                    <td><?php  echo htmlentities($row->FullName);?></td>
+                                                   <td><?php  echo htmlentities($row->MobileNumber);?></td>
+                                                    <td><?php  echo htmlentities($row->NameofFather);?></td>
+                                                  <?php if($row->Status==""){ ?>
+
+                     <td><?php echo "Still Pending"; ?></td>
+<?php } else { ?>                  <td><?php  echo htmlentities($row->Status);?>
+                  </td>
+                  <?php } ?>
+                                                    <td class="datatable-ct"><a href="view-application-detail.php?viewid=<?php echo htmlentities ($row->ID);?>"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                    </td>
+                                                </tr>
+                                             <?php $cnt=$cnt+1;}} ?>  
+                                            
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
-                              
                             </div>
                         </div>
-                    
                     </div>
                 </div>
             </div>
-          
-
-        
-        
-         
+            <!-- Static Table End -->
         </div>
     </div>
-    <?php include_once('includes/footer.php');?>
-    <!-- Footer End-->
+  <?php include_once('includes/footer.php');?>
    
     <!-- jquery
 		============================================ -->
@@ -153,19 +193,10 @@ foreach($results as $row)
     <!-- scrollUp JS
 		============================================ -->
     <script src="js/jquery.scrollUp.min.js"></script>
-    <!-- scrollUp JS
-		============================================ -->
-    <script src="js/wow/wow.min.js"></script>
     <!-- counterup JS
 		============================================ -->
     <script src="js/counterup/jquery.counterup.min.js"></script>
     <script src="js/counterup/waypoints.min.js"></script>
-    <script src="js/counterup/counterup-active.js"></script>
-    <!-- jvectormap JS
-		============================================ -->
-    <script src="js/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>
-    <script src="js/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-    <script src="js/jvectormap/jvectormap-active.js"></script>
     <!-- peity JS
 		============================================ -->
     <script src="js/peity/jquery.peity.min.js"></script>
@@ -174,10 +205,6 @@ foreach($results as $row)
 		============================================ -->
     <script src="js/sparkline/jquery.sparkline.min.js"></script>
     <script src="js/sparkline/sparkline-active.js"></script>
-    <!-- flot JS
-		============================================ -->
-    <script src="js/flot/Chart.min.js"></script>
-    <script src="js/flot/dashtwo-flot-active.js"></script>
     <!-- data table JS
 		============================================ -->
     <script src="js/data-table/bootstrap-table.js"></script>
@@ -191,6 +218,8 @@ foreach($results as $row)
     <!-- main JS
 		============================================ -->
     <script src="js/main.js"></script>
+
+
 </body>
 
 </html><?php }  ?>
